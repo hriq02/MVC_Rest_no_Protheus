@@ -1,2 +1,2 @@
 # RestMVC
-exemplo de api rest com mvc no protheus
+basicamente um template pra seu mvc com api no protheus
