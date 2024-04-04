@@ -4,6 +4,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
+
+/*-----------------------------------------------------------
+|   cria um objeto que formata um json e o posta no         |
+|   webservice da TOTVS MVC API                             |
+|                                                           |  
+|   criado por: Henrique Costa              03/04/2024      |
+-------------------------------------------------------------*/
+
+/**
+* esse objeto formata um json e o posta no webservice no modelo MVC API
+*
+* @author Henrique Costa
+*/
 public class PostObjLegacy {
     public String[] campos = {"ZI2_FILIAL","ZI2_ROLO","ZI2_OP","ZI2_PARTID","ZI2_PROD","ZI2_DESPRO","ZI2_PESLIQ","ZI2_TARA","ZI2_PESBRU","ZI2_DATPES","ZI2_HORPES" ,"ZI2_USUPES"};
     public String[] valores;
