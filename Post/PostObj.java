@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
-public class PostObj{
-    public String[] campos;
+public class PostObjLegacy {
+    public String[] campos = {"ZI2_FILIAL","ZI2_ROLO","ZI2_OP","ZI2_PARTID","ZI2_PROD","ZI2_DESPRO","ZI2_PESLIQ","ZI2_TARA","ZI2_PESBRU","ZI2_DATPES","ZI2_HORPES" ,"ZI2_USUPES"};
     public String[] valores;
     private String mvc = "MvcCApiM";
     private String form = "FORMZI2";
