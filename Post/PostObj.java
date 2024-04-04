@@ -1,75 +1,67 @@
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.nio.file.Files;
 
-
-
-/*-----------------------------------------------------------
-|   cria um objeto que formata um json e o posta no         |
-|   webservice da TOTVS MVC API                             |
-|                                                           |  
-|   criado por: Henrique Costa              03/04/2024      |
--------------------------------------------------------------*/
-
-/**
-* esse objeto formata um json e o posta no webservice no modelo MVC API
-*
-* @author Henrique Costa
-*/
-public class PostObj {
+public class PostObj{
     public String[] campos;
     public String[] valores;
     private String mvc = "MvcCApiM";
     private String form = "FORMZI2";
-    private int operation = 3;
-    private URL url;
+    private String url;
     private String json;
-    @SuppressWarnings("deprecation")
-    public PostObj(String[] _campos, String[] _valores, int _operation, String _mvc, String _form,String _url) throws MalformedURLException{
+    public PostObjLegacy(String[] _valores, String _mvc, String _form,String _url){
         mvc = _mvc;
         form = _form;
-        campos = _campos;
+        campos = new String[]{"ZI2_FILIAL","ZI2_ROLO","ZI2_OP","ZI2_PARTID","ZI2_PROD","ZI2_DESPRO","ZI2_PESLIQ","ZI2_TARA","ZI2_PESBRU","ZI2_DATPES","ZI2_HORPES" ,"ZI2_USUPES"};
         valores = _valores;
-        operation = _operation;
-        url = new URL(_url);
+        url = _url;
     }
-    /**
-     * esse Metodo é responsavel por postar um objeto para o webservice baseado nos valores dados
-     *
-     * @return         	ira retornar uma String com o resultado do POST request
-     */
 
+    /**
+    * esse Metodo é responsavel por postar um objeto para o webservice baseado nos valores dados
+    *
+    * @return         	ira retornar uma String com o resultado do POST request
+    */
     public String Post() throws IOException{
         json = getPostJson();
-        String rs = "failed to post";
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        try {
-            con.setRequestMethod("POST");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            return rs;
+        String returnMessage = "";
+
+        //a gabiarra e o seguinte, cria um diretorio temp com json e bat, e roda o bat usando o curl
+        String tmpdir = Files.createTempDirectory("tempPostJV").toFile().getAbsolutePath();
+
+        FileWriter jsonFile = new FileWriter(tmpdir + "/post.json");
+        FileWriter batchFile = new FileWriter(tmpdir + "/post.bat");
+
+        jsonFile.write(json);
+        batchFile.write("cd /d %~dp0\ncurl \"" + url + "\" -H \"Content-Type:application/json\" -d @post.json");
+
+        batchFile.close();
+        jsonFile.close();
+
+        //String[] command = { tmpdir + "/post.bat"};
+        Process proc = Runtime.getRuntime().exec(new String[] { tmpdir + "/post.bat"});
+
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+        // Read the output from the command
+        System.out.println("output from command:\n");
+        String s = null;
+
+        while ((s = stdInput.readLine()) != null) {
+            returnMessage += s + "\n";
         }
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = json.getBytes("utf-8");
-            os.write(input, 0, input.length);			
+
+        // Read any errors from the attempted command
+        System.out.println("errors of the command (if any):\n");
+        while ((s = stdError.readLine()) != null) {
+            //System.out.println(s);
+            returnMessage += s + "\n";
         }
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            rs = response.toString();
-        }
-        return rs;
+
+        return returnMessage;
     }
 
     /**
@@ -78,7 +70,7 @@ public class PostObj {
     * @return         	retorna String no Formato Json
     */
     public String getPostJson(){
-        String json = "{\"id\":\""+ mvc + "\",\"operation\":" + operation + ",\"models\":[{\"id\":\"" + form + "\",\"modeltype\": \"FIELDS\",\"fields\":[";
+        String json = "{\"id\":\""+ mvc + "\",\"operation\":3,\"models\":[{\"id\":\"" + form + "\",\"modeltype\": \"FIELDS\",\"fields\":[";
         json += GetItems();
         json += "]}]}";
 
@@ -101,5 +93,4 @@ public class PostObj {
         return jsonRt;
         
     }
-    
 }
