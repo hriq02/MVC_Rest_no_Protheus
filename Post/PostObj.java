@@ -14,7 +14,6 @@ public class PostObj{
     public PostObjLegacy(String[] _valores, String _mvc, String _form,String _url){
         mvc = _mvc;
         form = _form;
-        campos = new String[]{"ZI2_FILIAL","ZI2_ROLO","ZI2_OP","ZI2_PARTID","ZI2_PROD","ZI2_DESPRO","ZI2_PESLIQ","ZI2_TARA","ZI2_PESBRU","ZI2_DATPES","ZI2_HORPES" ,"ZI2_USUPES"};
         valores = _valores;
         url = _url;
     }
