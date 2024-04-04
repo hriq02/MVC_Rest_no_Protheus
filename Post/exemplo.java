@@ -7,20 +7,20 @@ public class App {
         -----------------------------------------------------------*/
 
         RoloProd rolo = new RoloProd();
-        rolo.ZI2_FILIAL = "14";
-        rolo.ZI2_ROLO = "JVC4325";
-        rolo.ZI2_OP = "181223";
-        rolo.ZI2_PARTID = "00000000";
-        rolo.ZI2_PROD = "14M040000150";
-        rolo.ZI2_DESPRO = "OURELAS DIV CORES .";
-        rolo.ZI2_PESLIQ = "17.51";
-        rolo.ZI2_TARA = "0.10";
-        rolo.ZI2_PESBRU = "17.61";
+        rolo.ZI2_FILIAL = "";
+        rolo.ZI2_ROLO = "";
+        rolo.ZI2_OP = "";
+        rolo.ZI2_PARTID = "";
+        rolo.ZI2_PROD = "";
+        rolo.ZI2_DESPRO = "";
+        rolo.ZI2_PESLIQ = "";
+        rolo.ZI2_TARA = "";
+        rolo.ZI2_PESBRU = "";
         rolo.ZI2_DATPES = "20231218";
         rolo.ZI2_HORPES = "15:38:44";
-        rolo.ZI2_USUPES = "jmoura";
+        rolo.ZI2_USUPES = "";
 
-        PostObjLegacy postObj = new PostObjLegacy(rolo.getValores() , "MvcCApiM", "FORMZI2", "http://10.70.2.18:6074/rest/fwmodel/rolos");
+        PostObj postObj = new PostObj(rolo.getValores() , "MvcCApiM", "FORMZI2", "url/rest/fwmodel/rolos");
         System.out.println(postObj.Post());
     }
 }
@@ -28,6 +28,10 @@ public class App {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+//essa é uma classe basica que serve mais pra alimentar o PostObj
+//não é necessaria no fonte, mas fiz para facilitar a leitura
+//ela só é responsavel em retornar um array de strings
 
 public class RoloProd{
     public String ZI2_FILIAL = "";
