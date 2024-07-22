@@ -1,2 +1,4 @@
 objeto de modelo:
 https://tdn.totvs.com/pages/releaseview.action?pageId=271671548
+um passo a passo mais detalhado:
+https://mvcadvpl.wordpress.com/category/rest/
